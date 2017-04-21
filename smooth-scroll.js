@@ -24,8 +24,10 @@ var smoothScroll = new function() {
     var position = el.getBoundingClientRect();
     options = options || {};
     options['element'] = el; // Remember the target element
-    return self.scrollToCoord(window.pageXOffset + position.left,
-                              window.pageYOffset + position.top, options);
+    return self.scrollToCoord( // Center element horizontally
+        Math.max(window.pageXOffset + position.left +
+            position.width / 2 - window.innerWidth / 2, 0),
+        window.pageYOffset + position.top, options);
   };
 
   self.scrollVertical = function(y, options) {

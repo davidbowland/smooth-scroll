@@ -14,14 +14,14 @@ function getTimeURI($path) {
   <style type="text/css">
 .scrollRow {
   display: table;
-  text-align: center;
-  vertical-align: middle;
+  height: 100vh;
   width: 300vh;
+  table-layout: fixed;
 }
 .scrollRow > div {
   display: table-cell;
-  height: 100vh;
-  width: 100vh;
+  text-align: center;
+  padding-top: 2.5em;
 }
 #cell2, #cell4, #cell6, #cell8 {
   background-color: #d3d3d3;

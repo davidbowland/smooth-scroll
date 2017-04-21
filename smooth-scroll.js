@@ -4,7 +4,7 @@ https://github.com/davidbowland/smooth-scroll */
 var smoothScroll = new function() {
   var self = this,
       defaultOptions = {
-        'duration': 100, // Duration, in milliseconds, for the page to scroll
+        'duration': 300, // Duration, in milliseconds, for the page to scroll
         'step': 10, // Duration, in milliseconds, between scroll updates
         'element': undefined // Element scroll is intended to reach
       },

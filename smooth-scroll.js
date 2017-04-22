@@ -9,11 +9,12 @@ var smoothScroll = new function() {
         'element': undefined // Element scroll is intended to reach
       },
 /*    defaultScroll = { // For reference
-        'start_x': undefined,
-        'end_x': undefined,
-        'start_y': undefined,
-        'end_y': undefined,
+        'start_x': window.pageXOffset,
+        'end_x': x,
+        'start_y': window.pageYOffset,
+        'end_y': y,
         'count': 0,
+        'resize': false,
         'timer': undefined,
         'options': {}
       },*/
@@ -21,13 +22,10 @@ var smoothScroll = new function() {
 
   /* Public methods */
   self.scrollToElement = function(el, options) {
-    var position = el.getBoundingClientRect();
+    var position = getElementPosition(el);
     options = options || {};
     options['element'] = el; // Remember the target element
-    return self.scrollToCoord( // Center element horizontally
-        Math.max(window.pageXOffset + position.left +
-            position.width / 2 - window.innerWidth / 2, 0),
-        window.pageYOffset + position.top, options);
+    return self.scrollToCoord(position.x, position.y, options);
   };
 
   self.scrollVertical = function(y, options) {
@@ -49,6 +47,7 @@ var smoothScroll = new function() {
       'start_y': window.pageYOffset,
       'end_y': y,
       'count': 0,
+      'resize': false,
       'timer': undefined,
       'options': {
         'duration': Math.ceil(Math.max(
@@ -60,6 +59,10 @@ var smoothScroll = new function() {
     };
     activeScroll['timer'] = window.setInterval(timerTick,
                                                activeScroll.options['step']);
+    // Capture resize events to move along with elements
+    if (activeScroll.options['element']) {
+      window.addEventListener('resize', resizeEvent);
+    }
     return self;
   };
 
@@ -75,37 +78,48 @@ var smoothScroll = new function() {
     if (timer) { // Cancel timer if it exists
       window.clearInterval(timer);
       activeScroll['timer'] = undefined;
+      if (activeScroll.options['element']) {
+        window.removeEventListener('resize', resizeEvent);
+      }
     }
     return self;
   };
 
   self.unload = function() {
-    var fields, el, x;
-    fields = document.querySelectorAll('[data-smooth-scroll-hash]');
-    for (x = 0; el = fields[x]; x++) {
-      el.removeEventListener('click', scrollToHash);
-    }
-    fields = document.querySelectorAll('[data-smooth-scroll-to]');
-    for (x = 0; el = fields[x]; x++) {
+    var fields = document.querySelectorAll('[data-smooth-scroll-to]');
+    for (var el, x = 0; el = fields[x]; x++) {
       el.removeEventListener('click', scrollToClick);
     }
     return self.cancel();
   };
 
   /* Private functions */
-  var attrPresentNotFalse = function(el, attr) {
-    var value = el.getAttribute(attr);
-    return value && value.toLowerCase() != 'false';
+  var getElementPosition = function(el) {
+    var position = el.getBoundingClientRect();
+    return {x: Math.max(window.pageXOffset + position.left +
+                            // Center element horizontally
+                            position.width / 2 - window.innerWidth / 2, 0),
+            y: window.pageYOffset + position.top
+           };
   };
 
   var timerTick = function() {
     var halfDuration = activeScroll.options['duration'] / 2,
-        countDifference = halfDuration - activeScroll['count'] + 1,
+        // Distance to midpoint (signed)
+        countDifference = halfDuration - activeScroll['count'],
+        // Percentage of scroll on logarithmic scale (-100% to 100%)
         countPercentage = (Math.log(Math.abs(countDifference)) /
                            Math.log(halfDuration) * Math.sign(countDifference)),
-        countCurrent,
-        halfX = (activeScroll['end_x'] - activeScroll['start_x']) / 2,
-        halfY = (activeScroll['end_y'] - activeScroll['start_y']) / 2;
+        countCurrent, halfX, halfY, position;
+    // Update scroll target on resize events
+    if (activeScroll['resize']) {
+      position = getElementPosition(activeScroll.options['element']);
+      activeScroll['end_x'] = position.x;
+      activeScroll['end_y'] = position.y;
+      activeScroll['resize'] = false;
+    }
+    halfX = (activeScroll['end_x'] - activeScroll['start_x']) / 2,
+    halfY = (activeScroll['end_y'] - activeScroll['start_y']) / 2;
     window.scrollTo(activeScroll['start_x'] + halfX - halfX * countPercentage,
                     activeScroll['start_y'] + halfY - halfY * countPercentage);
     countCurrent = (activeScroll['count'] += activeScroll.options['step']);
@@ -114,37 +128,25 @@ var smoothScroll = new function() {
     }
   };
 
-  var scrollToByString = function(identifier, target) {
-    self.scrollToElement(document.getElementById(identifier) ||
-            document.getElementsByName(identifier)[0],
-        {'duration': target.getAttribute('data-smooth-scroll-duration') });
+  var resizeEvent = function() {
+    activeScroll['resize'] = true;
   };
 
   var scrollToClick = function(ev) {
-    scrollToByString(ev.target.getAttribute('data-smooth-scroll-to'),
-                     ev.target);
-    ev.preventDefault();
-  };
-
-  var scrollToHash = function(ev) {
-    scrollToByString(ev.target.hash.slice(1), ev.target);
+    var identifier = ev.target.getAttribute('data-smooth-scroll-to');
+    if (identifier == '#') {
+      identifier = ev.target.hash.slice(1); }
+    self.scrollToElement(document.getElementById(identifier) ||
+            document.getElementsByName(identifier)[0],
+        {'duration': ev.target.getAttribute('data-smooth-scroll-duration') });
     ev.preventDefault();
   };
 
   /* Constructor / on load */
   var documentLoaded = function(ev) {
-    var fields, el, x;
-    // Register event listeners based on data-smooth-scroll-hash property
-    fields = document.querySelectorAll('[data-smooth-scroll-hash]');
-    for (x = 0; el = fields[x]; x++) {
-      if (el.getAttribute('data-smooth-scroll-hash').toLowerCase() !==
-          'false') { // "false" explicitly denies
-        el.addEventListener('click', scrollToHash);
-      }
-    }
     // Register event listeners based on data-smooth-scroll-to property
-    fields = document.querySelectorAll('[data-smooth-scroll-to]');
-    for (x = 0; el = fields[x]; x++) {
+    var fields = document.querySelectorAll('[data-smooth-scroll-to]');
+    for (var el, x = 0; el = fields[x]; x++) {
       el.addEventListener('click', scrollToClick);
     }
   };

@@ -32,35 +32,35 @@ function getTimeURI($path) {
   <div class="scrollRow">
     <div id="cell1">
       1<br />
-      <a href="#cell4" data-smooth-scroll-hash="true">Down 1</a><br />
-      <a href="#cell7" data-smooth-scroll-hash="true">Down 2</a>
+      <a href="#cell4" data-smooth-scroll-to="#">Down 1</a><br />
+      <a href="#cell7" data-smooth-scroll-to="#">Down 2</a>
     </div>
     <div id="cell2">
       2<br />
-      <a href="#cell5" data-smooth-scroll-hash="true">Down 1</a><br />
-      <a href="#cell7" data-smooth-scroll-hash="true">Left 1, Down 2</a><br />
+      <a href="#cell5" data-smooth-scroll-to="#">Down 1</a><br />
+      <a href="#cell7" data-smooth-scroll-to="#">Left 1, Down 2</a><br />
     </div>
     <div id="cell3">
       3<br />
-      <a href="#cell1" data-smooth-scroll-hash="true">Left 2</a><br />
-      <a href="#cell5" data-smooth-scroll-hash="true">Left 1, Down 1</a><br />
+      <a href="#cell1" data-smooth-scroll-to="#">Left 2</a><br />
+      <a href="#cell5" data-smooth-scroll-to="#">Left 1, Down 1</a><br />
     </div>
   </div>
   <div class="scrollRow">
     <div id="cell4">
       4<br />
-      <button data-smooth-scroll-to="cell1" data-smooth-scroll-duration="3000">Up 1, 3 sec</button><br />
+      <button data-smooth-scroll-to="cell6" data-smooth-scroll-duration="3000">Right 2, 3 sec</button><br />
       <button data-smooth-scroll-to="cell7">Down 1</button>
     </div>
     <div id="cell5">
       5<br />
       <button data-smooth-scroll-to="cell2" data-smooth-scroll-duration="3000">Up 1, 3 sec</button><br />
-      <button data-smooth-scroll-to="cell7">Left 1, Down 1</button>
+      <button data-smooth-scroll-to="cell9">Right 1, Down 1</button>
     </div>
     <div id="cell6">
       6<br />
       <button data-smooth-scroll-to="cell3" data-smooth-scroll-duration="3000">Up 1, 3 sec</button><br />
-      <button data-smooth-scroll-to="cell4">Left 2</button>
+      <button data-smooth-scroll-to="cell8">Left 1, Down 1</button>
     </div>
   </div>
   <div class="scrollRow">

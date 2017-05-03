@@ -36,7 +36,7 @@ Smooth viewport scrolling (IE9+)
    See `smoothScroll.scrollToElement` for options.
 
 * `smoothScroll.scrollToCoord(<x>, <y>, [options])`  
-   ex: `smoothScroll.scrollToCoord(50, 150)` or `smoothScroll.scrollToCoord(50, 150, {duration: 2000})`
+   ex: `smoothScroll.scrollToCoord(50, 150)` or `smoothScroll.scrollToCoord(50, 150, {duration: 2000, step: 50})`
    * Scrolls the viewport until `window.pageXOffset` is equal to the x value and `window.pageYOffset` is equal to the y value  
    See `smoothScroll.scrollToElement` for options.
 

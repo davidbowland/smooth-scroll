@@ -133,12 +133,12 @@ var smoothScroll = new function() {
   };
 
   var scrollToClick = function(ev) {
-    var identifier = ev.target.getAttribute('data-smooth-scroll-to');
+    var identifier = ev.currentTarget.getAttribute('data-smooth-scroll-to');
     if (identifier == '#') {
-      identifier = ev.target.hash.slice(1); }
+      identifier = ev.currentTarget.hash.slice(1); }
     self.scrollToElement(document.getElementById(identifier) ||
             document.getElementsByName(identifier)[0],
-        {'duration': ev.target.getAttribute('data-smooth-scroll-duration') });
+        {'duration': ev.currentTarget.getAttribute('data-smooth-scroll-duration') });
     ev.preventDefault();
   };
 

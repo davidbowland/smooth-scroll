@@ -7,7 +7,6 @@ Smooth viewport scrolling (IE9+)
 This script supports being loaded `defer`.
 
 #### HTML attributes and possible values
-
 * `data-smooth-scroll-to`
    * (any element id) Designates an element that schould scroll when clicked to the specified element ID
    * `#` - Special value indicating the #hash value indicated by the `href` attribute should be followed

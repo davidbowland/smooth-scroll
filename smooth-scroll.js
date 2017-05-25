@@ -151,5 +151,4 @@ var smoothScroll = new function() {
     }
   };
   document.addEventListener('DOMContentLoaded', documentLoaded, true);
-  documentLoaded();
 };

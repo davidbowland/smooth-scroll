@@ -8,23 +8,18 @@ var smoothScroll = new function() {
         'step': 10, // Duration, in milliseconds, between scroll updates
         'element': undefined // Element scroll is intended to reach
       },
-/*    defaultScroll = { // For reference
-        'start_x': window.pageXOffset,
-        'end_x': x,
-        'start_y': window.pageYOffset,
-        'end_y': y,
-        'count': 0,
-        'resize': false,
-        'timer': undefined,
-        'options': {}
-      },*/
-      activeScroll = {};
+      start_x, start_y, // Starting viewport top left
+      end_x, end_y, // Ending viewport top left
+      count = 0, // Steps taken in scroll
+      resize = false, // Whether a resize event has occurred
+      timer = undefined, // Current timer
+      currentOptions = {}; // Scroll options
 
   /* Public methods */
   self.scrollToElement = function(el, options) {
     var position = getElementPosition(el);
     options = options || {};
-    options['element'] = el; // Remember the target element
+    options.element = el; // Remember the target element
     return self.scrollToCoord(position.x, position.y, options);
   };
 
@@ -40,47 +35,42 @@ var smoothScroll = new function() {
     var step;
     self.cancel(); // Stop existing scrolling
     options = options || defaultOptions;
-    step = options['step'] || defaultOptions['step'];
-    activeScroll = {
-      'start_x': window.pageXOffset,
-      'end_x': x,
-      'start_y': window.pageYOffset,
-      'end_y': y,
-      'count': 0,
-      'resize': false,
-      'timer': undefined,
-      'options': {
+    step = options.step || defaultOptions.step;
+    // Set starting and ending positions
+    start_x = window.pageXOffset;
+    start_y = window.pageYOffset;
+    end_x = x;
+    end_y = y;
+    count = 0; // Zero steps have been taken
+    resize = false; // Screen has not resized
+    currentOptions = {
         'duration': Math.ceil(Math.max(
-                        options['duration'] || defaultOptions['duration'],
+                        options.duration || defaultOptions.duration,
                         10) / step) * step,
         'step': step,
-        'element': options['element'] || defaultOptions['element']
-      }
-    };
-    activeScroll['timer'] = window.setInterval(timerTick,
-                                               activeScroll.options['step']);
+        'element': options.element || defaultOptions.element
+      };
+    // Set timer for first scroll
+    timer = window.setInterval(timerTick, currentOptions.step);
     // Capture resize events to move along with elements
-    if (activeScroll.options['element']) {
-      window.addEventListener('resize', resizeEvent);
-    }
+    if (currentOptions.element) {
+      window.addEventListener('resize', resizeEvent); }
     return self;
   };
 
   self.finish = function() {
-    if (activeScroll['timer']) { // Scroll immediately to the end
-      window.scrollTo(activeScroll['end_x'], activeScroll['end_y']);
-    }
+    if (timer) { // Scroll immediately to the end
+      window.scrollTo(end_x, end_y); }
     return self.cancel();
   };
 
   self.cancel = function() {
-    var timer = activeScroll['timer'];
-    if (timer) { // Cancel timer if it exists
+    // Cancel timer if it exists
+    if (timer) {
       window.clearInterval(timer);
-      activeScroll['timer'] = undefined;
-      if (activeScroll.options['element']) {
-        window.removeEventListener('resize', resizeEvent);
-      }
+      timer = undefined;
+      if (currentOptions.element) {
+        window.removeEventListener('resize', resizeEvent); }
     }
     return self;
   };
@@ -104,32 +94,32 @@ var smoothScroll = new function() {
   };
 
   var timerTick = function() {
-    var halfDuration = activeScroll.options['duration'] / 2,
+    var halfDuration = currentOptions.duration / 2,
         // Distance to midpoint (signed)
-        countDifference = halfDuration - activeScroll['count'],
+        countDifference = halfDuration - count,
         // Percentage of scroll on logarithmic scale (-100% to 100%)
         countPercentage = (Math.log(Math.abs(countDifference)) /
                            Math.log(halfDuration) * Math.sign(countDifference)),
         countCurrent, halfX, halfY, position;
     // Update scroll target on resize events
-    if (activeScroll['resize']) {
-      position = getElementPosition(activeScroll.options['element']);
-      activeScroll['end_x'] = position.x;
-      activeScroll['end_y'] = position.y;
-      activeScroll['resize'] = false;
+    if (resize) {
+      position = getElementPosition(currentOptions.element);
+      end_x = position.x;
+      end_y = position.y;
+      resize = false;
     }
-    halfX = (activeScroll['end_x'] - activeScroll['start_x']) / 2,
-    halfY = (activeScroll['end_y'] - activeScroll['start_y']) / 2;
-    window.scrollTo(activeScroll['start_x'] + halfX - halfX * countPercentage,
-                    activeScroll['start_y'] + halfY - halfY * countPercentage);
-    countCurrent = (activeScroll['count'] += activeScroll.options['step']);
-    if (countCurrent > activeScroll.options['duration']) {
+    halfX = (end_x - start_x) / 2;
+    halfY = (end_y - start_y) / 2;
+    window.scrollTo(start_x + halfX - halfX * countPercentage,
+                    start_y + halfY - halfY * countPercentage);
+    countCurrent = (count += currentOptions.step);
+    if (countCurrent > currentOptions.duration) {
       self.finish(); // End after the duration has been hit
     }
   };
 
   var resizeEvent = function() {
-    activeScroll['resize'] = true;
+    resize = true;
   };
 
   var scrollToClick = function(ev) {

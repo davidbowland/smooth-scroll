@@ -2,7 +2,9 @@
 Smooth viewport scrolling (IE9+)
 
 ## HTML-driven
- #hash links can be made to scroll to the target by adding a single attribute, and other elements can be made click-to-scroll using the same attribute. When scrolling to an element, the end destination is automatically updated when the viewport is resized.
+ #hash links can be made to scroll to the target by adding a single attribute, and other elements can be made click-to-scroll using the same attribute. When scrolling to an element, the end destination is automatically updated when the viewport is resized.  
+  
+This script supports being loaded `defer`.
 
 #### HTML attributes and possible values
 

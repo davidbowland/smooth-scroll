@@ -14,6 +14,9 @@ This script supports being loaded `defer`.
 * `data-smooth-scroll-duration`
    * (any integer >= 10) Duration of scroll animation in milliseconds (default: 300).
 
+* `data-smooth-scroll-hash`
+   * (Value is ignored) Designates a container of link elements with hash targets. All anchor elements with a `href` value beginning with `#` will automatically be set to `data-smooth-scroll-to="#"`.
+
 ## Extensible through JavaScript
 
 #### JavaScript API

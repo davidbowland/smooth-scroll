@@ -139,6 +139,11 @@ var smoothScroll = new function() {
     for (var el, x = 0; el = fields[x]; x++) {
       el.addEventListener('click', scrollToClick);
     }
+    fields = document.querySelectorAll('[data-smooth-scroll-hash] a[href^="#"]');
+    for (var el, x = 0; el = fields[x]; x++) {
+      el.setAttribute('data-smooth-scroll-to', '#');
+      el.addEventListener('click', scrollToClick);
+    }
   };
   document.addEventListener('DOMContentLoaded', documentLoaded, true);
   // Invoke documentLoaded immediately if the document is already loaded

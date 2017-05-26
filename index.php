@@ -1,4 +1,4 @@
-<?php
+<?php # smooth-scroll.js demonstration page
 function getTimeURI($path) {
   # Append the file modified time to the script name to prevent using cached resources
   $timestamp = base_convert(filemtime($path), 10, 36);
@@ -7,10 +7,13 @@ function getTimeURI($path) {
 ?><!DOCTYPE html>
 <html>
 <head>
+  <!-- Settings for demonstration only -->
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <!-- Fancy import of smooth-scroll.js -->
   <script src="<?php echo getTimeURI('smooth-scroll.js'); ?>"></script>
+  <!-- Styles for demonstration only -->
   <style type="text/css">
 .scrollRow {
   display: table;
@@ -29,6 +32,7 @@ function getTimeURI($path) {
   </style>
 </head>
 <body>
+  <!-- Test: data-smooth-scroll-to="#" and data-smooth-scroll-duration -->
   <div class="scrollRow">
     <div id="cell1">
       1<br />
@@ -63,6 +67,7 @@ function getTimeURI($path) {
       <button data-smooth-scroll-to="cell8">Left 1, Down 1</button>
     </div>
   </div>
+  <!-- Test: data-smooth-scroll-to with ID value and data-smooth-scroll-duration -->
   <div class="scrollRow">
     <div name="cell7">
       7<br />

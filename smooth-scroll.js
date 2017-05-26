@@ -141,4 +141,7 @@ var smoothScroll = new function() {
     }
   };
   document.addEventListener('DOMContentLoaded', documentLoaded, true);
+  // Invoke documentLoaded immediately if the document is already loaded
+  if (document.readyState == 'complete') {
+    documentLoaded(); }
 };

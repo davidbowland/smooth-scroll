@@ -86,9 +86,10 @@ var smoothScroll = new function() {
   /* Private functions */
   var getElementPosition = function(el) {
     var position = el.getBoundingClientRect();
-    return {x: Math.max(window.pageXOffset + position.left +
-                            // Center element horizontally
-                            position.width / 2 - window.innerWidth / 2, 0),
+    // Center element on screen horizontally but not beyond body edge
+    return {x: Math.min(Math.max(window.pageXOffset + position.left +
+                       position.width / 2 - window.innerWidth / 2, 0),
+                   document.body.getBoundingClientRect().width),
             y: window.pageYOffset + position.top
            };
   };

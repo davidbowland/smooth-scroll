@@ -8,14 +8,14 @@ This script supports being loaded `defer`.
 
 #### HTML attributes and possible values
 * `data-smooth-scroll-to`
-   * (any element id) Designates an element that schould scroll when clicked to the specified element ID.
-   * `#` - Special value indicating the #hash value indicated by the `href` attribute should be followed.
+   * (any element id) Designates an element that should scroll when clicked, to the specified element ID
+   * `#` - Special value indicating the #hash value indicated by the `href` attribute should be followed
 
 * `data-smooth-scroll-duration`
-   * (any integer >= 10) Duration of scroll animation in milliseconds (default: 300).
+   * (any integer >= 10) Duration of scroll animation in milliseconds (default: 300)
 
 * `data-smooth-scroll-hash`
-   * (Value is ignored) Designates a container of link elements with hash targets. All anchor elements with a `href` value beginning with `#` will automatically be set to `data-smooth-scroll-to="#"`.
+   * (Value is ignored) Designates a container of link elements with hash targets. All anchor elements with a `href` value beginning with `#` will automatically be set to `data-smooth-scroll-to="#"`
 
 ## Extensible through JavaScript
 

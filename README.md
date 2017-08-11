@@ -28,6 +28,7 @@ This script supports being loaded `defer`.
    Options is an object that allows the follow attributes, which are case-sensitive:
       * `duration` - Duration of scroll animation in milliseconds (default: 300)
       * `step` - Duration between scroll animation updates in milliseconds (default: 10)
+   * See `getHeaderHeightOverride` to prevent element from scrolling behind floating page headers
 
 * `smoothScroll.scrollVertical(<y>, [options])`  
    ex: `smoothScroll.scrollVertical(150)` or `smoothScroll.scrollVertical(150, {duration: 1500})`
@@ -53,3 +54,6 @@ This script supports being loaded `defer`.
 * `smoothScroll.unload()`  
    *Made available for debugging*  
    * Removes all scroll events and cancels any active scrolling animation
+
+* `smoothScroll.getHeaderHeightOverride()`  
+   * Define this function to a custom function that returns the height, in pixels, of the floating page header so `scrollToElement` does not scroll elements behind the header

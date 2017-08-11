@@ -83,6 +83,12 @@ var smoothScroll = new function() {
     return self.cancel();
   };
 
+  /* Function to be overridden */
+
+  self.getHeaderHeightOverride = function() {
+    return 0;
+  };
+
   /* Private functions */
   var getElementPosition = function(el) {
     var position = el.getBoundingClientRect();
@@ -90,7 +96,7 @@ var smoothScroll = new function() {
     return {x: Math.min(Math.max(window.pageXOffset + position.left +
                        position.width / 2 - window.innerWidth / 2, 0),
                    document.body.getBoundingClientRect().width),
-            y: window.pageYOffset + position.top
+            y: window.pageYOffset + position.top - self.getHeaderHeightOverride()
            };
   };
 

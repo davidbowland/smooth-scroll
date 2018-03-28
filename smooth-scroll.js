@@ -106,7 +106,7 @@ var smoothScroll = new function() {
         countDifference = halfDuration - count,
         // Percentage of scroll on logarithmic scale (-100% to 100%)
         countPercentage = (Math.max(Math.log(Math.abs(countDifference)), 0) /
-                           Math.log(halfDuration) * Math.sign(countDifference)),
+                           Math.log(halfDuration) * ((countDifference > 0) - (countDifference < 0))),
         countCurrent, halfX, halfY, position;
     // Update scroll target on resize events
     if (resize) {
